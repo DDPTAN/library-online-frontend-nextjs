@@ -9,27 +9,27 @@ import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 
-import AuthAdmin from "@/app/components/auth-admin/authAdmin";
+import AuthUser from "@/app/components/auth-user/authUser";
 import { updateTransaction } from "@/redux/features/transactionSlice";;
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export interface UpdateTransactionProps {
-  modalUpdateTransaction: boolean;
-  setModalUpdateTransaction: React.Dispatch<React.SetStateAction<boolean>>;
-  closeModalUpdateTransaction: () => void;
-  dataTransaction: any;
-  fetchTransactions: () => void;
+export interface UpdateFineProps {
+  modalUpdateFine: boolean;
+  setModalUpdateFine: React.Dispatch<React.SetStateAction<boolean>>;
+  closeModalUpdateFine: () => void;
+  dataFine: any;
+  fetchFines: () => void;
 }
 
-function UpdateTransaction({
-  modalUpdateTransaction,
-  setModalUpdateTransaction,
-  closeModalUpdateTransaction,
-  dataTransaction,
-  fetchTransactions,
-}: UpdateTransactionProps) {
+function UpdateFine({
+  modalUpdateFine,
+  setModalUpdateFine,
+  closeModalUpdateFine,
+  dataFine,
+  fetchFines,
+}: UpdateFineProps) {
   const { data: session, status } = useSession();
 
   const dispatch = useDispatch<AppDispatch>();
@@ -38,10 +38,10 @@ function UpdateTransaction({
     e.preventDefault();
     try {
       const data: any = {
-        idBook: dataTransaction?.idBook,
-        transactionType: dataTransaction?.isStatus ? "Return" : "Borrow",
-        totalBook: dataTransaction?.totalBook,
-        isStatus: !dataTransaction?.isStatus,
+        idBook: dataFine?.idBook,
+        transactionType: dataFine?.isStatus ? "Return" : "Borrow",
+        totalBook: dataFine?.totalBook,
+        isStatus: !dataFine?.isStatus,
       };
 
       const formData = new FormData();
@@ -50,7 +50,7 @@ function UpdateTransaction({
       formData.append("isStatus", data.isStatus);
 
       const response = await dispatch(
-        updateTransaction({ formData, id: dataTransaction?.id, session })
+        updateTransaction({ formData, id: dataFine?.id, session })
       );
       if (response.payload && response.payload.status === 200) {
         toast.success(response.payload.message, {
@@ -64,8 +64,8 @@ function UpdateTransaction({
           theme: "colored",
           style: { marginTop: "65px" },
         });
-        fetchTransactions();
-        setModalUpdateTransaction(false);
+        fetchFines();
+        setModalUpdateFine(false);
       } else if (
         (response.payload && response.payload.status === 401) ||
         (response.payload && response.payload.status === 404) ||
@@ -90,11 +90,11 @@ function UpdateTransaction({
 
   return (
     <section>
-      <Transition appear show={modalUpdateTransaction} as={Fragment}>
+      <Transition appear show={modalUpdateFine} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
-          onClose={closeModalUpdateTransaction}
+          onClose={closeModalUpdateFine}
         >
           <Transition.Child
             as={Fragment}
@@ -122,7 +122,7 @@ function UpdateTransaction({
                 <Dialog.Panel className="w-full max-w-md md:max-w-4xl mt-20 mb-10 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <div className="overflow-x-auto">
                     <p className="w-full mb-5 font-bold text-2xl text-gray-500">
-                      {dataTransaction?.isStatus
+                      {dataFine?.isStatus
                         ? "Return Book"
                         : "Borrow Book"}
                     </p>
@@ -171,26 +171,26 @@ function UpdateTransaction({
                       <tbody>
                         <tr className="border-b bg-white">
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {dataTransaction?.user?.username}
+                            {dataFine?.user?.username}
                           </td>
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {dataTransaction?.book?.title}
+                            {dataFine?.book?.title}
                           </td>
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {dataTransaction?.totalBook}
+                            {dataFine?.totalBook}
                           </td>
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {moment(dataTransaction?.loanDate).format(
+                            {moment(dataFine?.loanDate).format(
                               "DD MMMM YYYY"
                             )}
                           </td>
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {moment(dataTransaction?.returnDate).format(
+                            {moment(dataFine?.returnDate).format(
                               "DD MMMM YYYY"
                             )}
                           </td>
                           <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                            {moment(dataTransaction?.loanMaximum).format(
+                            {moment(dataFine?.loanMaximum).format(
                               "DD MMMM YYYY"
                             )}
                           </td>
@@ -207,14 +207,14 @@ function UpdateTransaction({
                               className="mr-3 px-3 py-1 rounded-md shadow bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white"
                               onClick={handleUpdateTransaction}
                             >
-                              {dataTransaction?.isStatus
+                              {dataFine?.isStatus
                                 ? "Return Book"
                                 : "Borrow Book"}
                             </button>
                             <button
                               type="submit"
                               className="px-3 py-1 rounded-md shadow bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white"
-                              onClick={() => setModalUpdateTransaction(false)}
+                              onClick={() => setModalUpdateFine(false)}
                             >
                               Cancel
                             </button>
@@ -233,4 +233,4 @@ function UpdateTransaction({
   );
 }
 
-export default AuthAdmin(UpdateTransaction);
+export default AuthUser(UpdateFine);

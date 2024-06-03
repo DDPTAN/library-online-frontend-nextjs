@@ -5,6 +5,7 @@ import userSlice from "./features/userSlice";
 import categorySlice from "./features/categorySlice";
 import bookSlice from "./features/bookSlice";
 import transactionSlice from "./features/transactionSlice";
+import fineSlice from "./features/fineSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     categorySlice: categorySlice,
     bookSlice: bookSlice,
     transactionSlice: transactionSlice,
+    fineSlice: fineSlice,
   },
 });
 

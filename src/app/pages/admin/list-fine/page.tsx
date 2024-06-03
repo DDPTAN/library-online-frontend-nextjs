@@ -3,101 +3,85 @@
 import { useSession } from "next-auth/react";
 
 import { useState, useEffect } from "react";
-import moment from "moment";
 
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
 
-import DetailTransaction from "@/app/components/detail-transaction/page";
-import UpdateTransaction from "@/app/pages/admin/update-transaction/page";
+import DetailFine from "@/app/components/detail-fine/page";
+// import UpdateFine from "@/app/pages/users/update-fine/page";
 import Search from "@/app/components/search/search";
-import ButtonDeleteTransaction from "@/app/components/button-delete-transaction/buttonDeleteTransaction";
-import ButtonUpdateTransaction from "@/app/components/button-update-transaction/buttonUpdateTransaction";
+import ButtonDeleteFine from "@/app/components/button-delete-fine/buttonDeleteFine";
+import ButtonUpdateFine from "@/app/components/button-update-fine/buttonUpdateFine";
 import Loading from "@/app/loading";
 import AuthAdmin from "@/app/components/auth-admin/authAdmin";
-import { fetchTransactionByAdmin } from "@/redux/features/transactionSlice";
+import { fetchFineByAdmin } from "@/redux/features/fineSlice";
 
-function ListTransaction() {
+function ListFine() {
   const { data: session, status } = useSession();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const transactions = useAppSelector(
-    (state: RootState) => state.transactionSlice.transactions
+  const fines = useAppSelector(
+    (state: RootState) => state.fineSlice.fines
   );
   const loading = useAppSelector(
-    (state: RootState) => state.transactionSlice.loading
+    (state: RootState) => state.fineSlice.loading
   );
 
   useEffect(() => {
-    dispatch(fetchTransactionByAdmin({ session, status }));
+    dispatch(fetchFineByAdmin({ session, status }));
   }, [dispatch, session, status]);
 
-  const [dataTransaction, setDataTransaction] = useState<any>();
-  const [modalDetailTransaction, setModalDetailTransaction] = useState(false);
-  const [modalUpdateTransaction, setModalUpdateTransaction] = useState(false);
-  const [transactionFound, setTransactionFound] = useState(true);
+  const [dataFine, setDataFine] = useState<any>();
+  const [modalDetailFine, setModalDetailFine] = useState(false);
+  const [modalUpdateFine, setModalUpdateFine] = useState(false);
+  const [fineFound, setFineFound] = useState(true);
   const [search, setSearch] = useState("");
 
-  function closeModalDetailTransaction() {
-    setModalDetailTransaction(false);
+  function closeModalDetailFine() {
+    setModalDetailFine(false);
   }
 
-  function closeModalUpdateTransaction() {
-    setModalUpdateTransaction(false);
+  function closeModalUpdateFine() {
+    setModalUpdateFine(false);
   }
 
-  const filteredTransactions = transactions.filter((transaction: any) => {
+  const filteredFines = fines.filter((fine: any) => {
     const searchLower = search.toLowerCase();
     return (
-      transaction?.transactionType?.toLowerCase().includes(searchLower) ||
-      transaction?.user?.username?.toLowerCase().includes(searchLower) ||
-      transaction?.book?.title?.toLowerCase().includes(searchLower) ||
-      transaction?.totalBook?.toString().includes(searchLower) ||
-      moment(transaction?.loanDate)
-        .format("DD MMMM YYYY")
-        .toLowerCase()
-        .includes(searchLower) ||
-      moment(transaction?.returnDate)
-        .format("DD MMMM YYYY")
-        .toLowerCase()
-        .includes(searchLower) ||
-      moment(transaction?.loanMaximum)
-        .format("DD MMMM YYYY")
-        .toLowerCase()
-        .includes(searchLower) ||
-      (transaction?.isStatus ? "Borrowed" : "Returned")
-        .toLowerCase()
-        .includes(searchLower)
+      fine?.user?.username?.toLowerCase().includes(searchLower) ||
+      fine?.book?.title?.toLowerCase().includes(searchLower) ||
+      fine?.totalDay?.toString().includes(searchLower) ||
+      fine?.totalFine?.toString().includes(searchLower)
     );
   });
 
   const handleSearchTransaction = (event: any) => {
     setSearch(event.target.value);
-    setTransactionFound(true);
+    setFineFound(true);
   };
 
   return (
     <section className="w-full min-h-screen mt-20">
-      <DetailTransaction
-        modalDetailTransaction={modalDetailTransaction}
-        setModalDetailTransaction={setModalDetailTransaction}
-        closeModalDetailTransaction={closeModalDetailTransaction}
-        dataTransaction={dataTransaction}
+      <DetailFine
+        modalDetailFine={modalDetailFine}
+        setModalDetailFine={setModalDetailFine}
+        closeModalDetailFine={closeModalDetailFine}
+        dataFine={dataFine}
       />
-      <UpdateTransaction
-        modalUpdateTransaction={modalUpdateTransaction}
-        setModalUpdateTransaction={setModalUpdateTransaction}
-        closeModalUpdateTransaction={closeModalUpdateTransaction}
-        dataTransaction={dataTransaction}
+      {/* <UpdateFine
+        modalUpdateFine={modalUpdateFine}
+        setModalUpdateFine={setModalUpdateFine}
+        closeModalUpdateFine={closeModalUpdateFine}
+        dataFine={dataFine}
         fetchTransactions={() =>
-          dispatch(fetchTransactionByAdmin({ session, status }))
+          dispatch(fetchFineByAdmin({ session, status }))
         }
-      />
+      /> */}
       <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
         <div className="mb-5 flex justify-between">
           <p className="m-0 text-center font-bold text-2xl text-gray-500">
-            List Transaction
+            List Fine
           </p>
         </div>
         {loading ? (
@@ -133,31 +117,13 @@ function ListTransaction() {
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Transaction<span className="text-transparent">x</span>Type
+                            Total<span className="text-transparent">x</span>Day
                           </th>
                           <th
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Total<span className="text-transparent">x</span>Book
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-2 py-4 text-white font-bold text-center"
-                          >
-                            Loan<span className="text-transparent">x</span>Date
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-2 py-4 text-white font-bold text-center"
-                          >
-                            Return<span className="text-transparent">x</span>Date
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-2 py-4 text-white font-bold text-center"
-                          >
-                            Max<span className="text-transparent">x</span>Loan
+                            Total<span className="text-transparent">x</span>Fine
                           </th>
                           <th
                             scope="col"
@@ -167,7 +133,7 @@ function ListTransaction() {
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-4 text-white font-bold text-center"
+                            className="px-2 py-4 text-white font-bold text-center"
                           >
                             Action
                           </th>
@@ -194,9 +160,9 @@ function ListTransaction() {
                           ></th>
                         </tr>
                       </thead>
-                      {filteredTransactions.length > 0 ? (
-                        filteredTransactions?.map(
-                          (transaction: any, i: any) => {
+                      {filteredFines.length > 0 ? (
+                        filteredFines?.map(
+                          (fine: any, i: any) => {
                             return (
                               <tbody key={i}>
                                 <tr className="border-b bg-white">
@@ -204,64 +170,46 @@ function ListTransaction() {
                                     {i++ + 1}
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {transaction?.user?.username}
+                                    {fine?.user?.username}
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {transaction?.book?.title}
+                                    {fine?.book?.title}
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {transaction?.transactionType}
+                                    {fine?.totalDay}
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {transaction?.totalBook}
+                                    {fine?.totalFine}
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {moment(transaction?.loanDate).format(
-                                      "DD MMMM YYYY"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {moment(transaction?.returnDate).format(
-                                      "DD MMMM YYYY"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {moment(transaction?.loanMaximum).format(
-                                      "DD MMMM YYYY"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {transaction?.isStatus
-                                      ? "Borrowed"
-                                      : "Returned"}
+                                    {fine?.status !== null ? "Paid" : "Not Paid"}
                                   </td>
                                   <td className="flex flex-col justify-center whitespace-nowrap px-6 py-4 text-center">
                                     <button
                                       type="button"
                                       className="mb-3 px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
                                       onClick={() => {
-                                        setModalDetailTransaction(true);
-                                        setDataTransaction(transaction);
+                                        setModalDetailFine(true);
+                                        setDataFine(fine);
                                       }}
                                     >
-                                      Detail Transaction
+                                      Detail Fine
                                     </button>
                                     <div className="flex justify-between">
-                                      <ButtonUpdateTransaction
-                                        transaction={transaction}
-                                        isStatus={transaction?.isStatus}
-                                        setDataTransaction={setDataTransaction}
-                                        setModalUpdateTransaction={
-                                          setModalUpdateTransaction
+                                      <ButtonUpdateFine
+                                        fine={fine}
+                                        setDataFine={setDataFine}
+                                        setModalUpdateFine={
+                                          setModalUpdateFine
                                         }
                                       />
                                       <span className="text-gray-500 font-bold text-xl">
                                         {" "}
                                         |{" "}
                                       </span>
-                                      <ButtonDeleteTransaction
-                                        transactionId={transaction?.id}
-                                        fetchTransactions={() => dispatch(fetchTransactionByAdmin({ session, status }))}
+                                      <ButtonDeleteFine
+                                        fineId={fine?.id}
+                                        fetchFines={() => dispatch(fetchFineByAdmin({ session, status }))}
                                       />
                                     </div>
                                   </td>
@@ -281,7 +229,7 @@ function ListTransaction() {
                               scope="col"
                               className="px-6 py-4 text-gray-500 text-left"
                             >
-                              Transaction not found
+                              Fine not found
                             </td>
                             <td
                               scope="col"
@@ -302,4 +250,4 @@ function ListTransaction() {
   );
 }
 
-export default AuthAdmin(ListTransaction);
+export default AuthAdmin(ListFine);

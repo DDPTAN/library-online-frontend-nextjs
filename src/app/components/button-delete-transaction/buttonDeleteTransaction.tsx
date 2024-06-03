@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { deleteTransaction } from "@/redux/features/transactionSlice";
 
-import { UserAuth } from "@/types/userAuth";
-
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +17,6 @@ interface TransactionDeleteProps {
 
 export default function ButtonDeleteTransaction({ transactionId, fetchTransactions }: TransactionDeleteProps) {
   const { data: session, status } = useSession();
-  const user: UserAuth | undefined = session?.user;
 
   const dispatch = useDispatch<AppDispatch>();
 

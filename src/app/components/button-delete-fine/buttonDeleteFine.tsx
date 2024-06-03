@@ -1,38 +1,30 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Menu } from "@headlessui/react";
 
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { deleteBook } from "@/redux/features/bookSlice";
+import { deleteFine } from "@/redux/features/fineSlice";
 
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-interface BookDeleteProps {
-  bookId: number;
-  fetchBooks: () => void;
+interface FineDeleteProps {
+  fineId: number;
+  fetchFines: () => void;
 }
 
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export default function ButtonDeleteBook({
-  bookId,
-  fetchBooks,
-}: BookDeleteProps) {
+export default function ButtonDeleteFine({ fineId, fetchFines }: FineDeleteProps) {
   const { data: session, status } = useSession();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleDeleteBook = async (id: number) => {
+  const handleDeleteFine = async (id: number) => {
     try {
       Swal.fire({
         title: "Are you sure?",
-        html: "Delete this book",
+        html: "Delete this fine",
         icon: "question",
         iconColor: "#6B7280",
         background: "#FFFFFF",
@@ -47,7 +39,7 @@ export default function ButtonDeleteBook({
         cancelButtonColor: "#CD2E71",
       }).then(async (result: any) => {
         if (result.isConfirmed) {
-          const response = await dispatch(deleteBook({ id, session }));
+          const response = await dispatch(deleteFine({ id, session }));
           if (response.payload && response.payload.status === 200) {
             toast.success(response.payload.message, {
               position: "top-right",
@@ -60,13 +52,13 @@ export default function ButtonDeleteBook({
               theme: "colored",
               style: { marginTop: "65px" },
             });
-            fetchBooks();
+            fetchFines();
           }
         }
       });
     } catch (e) {
       console.log("API Error:", e);
-      toast.error("Book failed to delete!", {
+      toast.error("Transaction failed to delete!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -80,19 +72,13 @@ export default function ButtonDeleteBook({
     }
   };
   return (
-    <Menu.Item>
-      {({ active }) => (
-        <button
-          type="button"
-          className={classNames(
-            active ? "text-white bg-sky-500 hover:bg-sky-600" : "text-white",
-            "w-full text-left block px-4 py-2 text-sm"
-          )}
-          onClick={() => handleDeleteBook(bookId)}
-        >
-          Delete Book
-        </button>
-      )}
-    </Menu.Item>
+    <button
+    type="button"
+    className="w-1/2 px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white hover:opacity-80"
+    onClick={() => handleDeleteFine(fineId)}
+  >
+    Delete
+  </button>
+
   );
 }

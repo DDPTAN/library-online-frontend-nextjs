@@ -4,28 +4,28 @@ import moment from "moment";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
-import "./detail-transaction.module.css";
+import "./detail-fine.module.css";
 
-export interface DetailTransactionProps {
-  modalDetailTransaction: boolean;
-  setModalDetailTransaction: React.Dispatch<React.SetStateAction<boolean>>;
-  closeModalDetailTransaction: () => void;
-  dataTransaction: any;
+export interface DetailFineProps {
+  modalDetailFine: boolean;
+  setModalDetailFine: React.Dispatch<React.SetStateAction<boolean>>;
+  closeModalDetailFine: () => void;
+  dataFine: any;
 }
 
 function DetailTransaction({
-  modalDetailTransaction,
-  setModalDetailTransaction,
-  closeModalDetailTransaction,
-  dataTransaction,
-}: DetailTransactionProps) {
+  modalDetailFine,
+  setModalDetailFine,
+  closeModalDetailFine,
+  dataFine,
+}: DetailFineProps) {
   return (
     <section>
-      <Transition appear show={modalDetailTransaction} as={Fragment}>
+      <Transition appear show={modalDetailFine} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-50"
-          onClose={closeModalDetailTransaction}
+          onClose={closeModalDetailFine}
         >
           <Transition.Child
             as={Fragment}
@@ -54,18 +54,18 @@ function DetailTransaction({
                   <div>
                     <div className="w-full flex justify-end">
                       <button
-                        onClick={() => setModalDetailTransaction(false)}
+                        onClick={() => setModalDetailFine(false)}
                         className="text-white text-lg px-2 rounded-full bg-red-500 hover:opacity-80"
                       >
                         X
                       </button>
                     </div>
                     <p className="w-full mb-5 font-bold text-2xl text-gray-500">
-                      Detail Transaction
+                      Detail Fine
                     </p>
                     <div className="mb-5 overflow-x-auto">
                       <p className="w-full font-bold text-lg text-gray-500">
-                        Transaction
+                        Fine
                       </p>
                       <table className="min-w-full text-left text-sm font-light">
                         <thead className="bg-white font-medium bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 shadow shadow-gray-400">
@@ -86,31 +86,15 @@ function DetailTransaction({
                               scope="col"
                               className="px-2 py-4 text-white font-bold text-center"
                             >
-                              Transaction<span className="text-transparent">x</span>Type
+                              Todal Day
+                              <span className="text-transparent">x</span>Day
                             </th>
                             <th
                               scope="col"
                               className="px-2 py-4 text-white font-bold text-center"
                             >
-                              Total<span className="text-transparent">x</span>Book
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-4 text-white font-bold text-center"
-                            >
-                              Loan<span className="text-transparent">x</span>Date
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-4 text-white font-bold text-center"
-                            >
-                              Return<span className="text-transparent">x</span>Date
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-4 text-white font-bold text-center"
-                            >
-                              Max Loan
+                              Total<span className="text-transparent">x</span>
+                              Fine
                             </th>
                             <th
                               scope="col"
@@ -123,36 +107,19 @@ function DetailTransaction({
                         <tbody>
                           <tr className="border-b bg-white">
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.username}
+                              {dataFine?.user?.username}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.book?.title}
+                              {dataFine?.book?.title}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.transactionType}
+                              {dataFine?.totalDay}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.totalBook}
+                              {dataFine?.totalFine}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {moment(dataTransaction?.loanDate).format(
-                                "DD MMMM YYYY"
-                              )}
-                            </td>
-                            <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {moment(dataTransaction?.returnDate).format(
-                                "DD MMMM YYYY"
-                              )}
-                            </td>
-                            <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {moment(dataTransaction?.loanMaximum).format(
-                                "DD MMMM YYYY"
-                              )}
-                            </td>
-                            <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.isStatus
-                                ? "Borrowed"
-                                : "Returned"}
+                              {dataFine?.status !== "" ? "Paid" : "Not Paid"}
                             </td>
                           </tr>
                         </tbody>
@@ -212,19 +179,19 @@ function DetailTransaction({
                         <tbody>
                           <tr className="border-b bg-white">
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.username}
+                              {dataFine?.user?.username}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.email}
+                              {dataFine?.user?.email}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.phone}
+                              {dataFine?.user?.phone}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.gender}
+                              {dataFine?.user?.gender}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.user?.address}
+                              {dataFine?.user?.address}
                             </td>
                           </tr>
                         </tbody>
@@ -259,7 +226,8 @@ function DetailTransaction({
                               scope="col"
                               className="px-2 py-4 text-white font-bold text-center"
                             >
-                              Publication<span className="text-transparent">x</span>Date
+                              Publication
+                              <span className="text-transparent">x</span>Date
                             </th>
                             <th
                               scope="col"
@@ -284,21 +252,21 @@ function DetailTransaction({
                         <tbody>
                           <tr className="border-b bg-white">
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.book?.title}
+                              {dataFine?.book?.title}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {moment(
-                                dataTransaction?.book?.publicationDate
-                              ).format("DD MMMM YYYY")}
+                              {moment(dataFine?.book?.publicationDate).format(
+                                "DD MMMM YYYY"
+                              )}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.book?.isbn}
+                              {dataFine?.book?.isbn}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.book?.pages}
+                              {dataFine?.book?.pages}
                             </td>
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataTransaction?.book?.author}
+                              {dataFine?.book?.author}
                             </td>
                           </tr>
                         </tbody>
