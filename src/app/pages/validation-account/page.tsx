@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,6 +27,8 @@ export default function ValidationAccount() {
 
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { expiryTime } = Object.fromEntries(searchParams);
 
   const [email, setEmail] = useState("");
 
@@ -185,7 +187,7 @@ export default function ValidationAccount() {
                 Verify
               </button>
             </form>
-            <ButtonResendOtp email={email} />
+            <ButtonResendOtp email={email} expiryTime={expiryTime} />
             <div className="col-span-full mt-2 text-center">
               <span className="text-sm text-center text-gray-500">
                 Don&rsquo;t have an account ?{" "}

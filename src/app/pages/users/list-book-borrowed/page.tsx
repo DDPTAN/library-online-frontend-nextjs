@@ -11,6 +11,7 @@ import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
 import DetailTransaction from "@/app/components/detail-transaction/page";
 import Search from "@/app/components/search/search";
 import { fetchTransactionByUser } from "@/redux/features/transactionSlice";
+import { createFine } from "@/redux/features/fineSlice";
 import AuthUser from "@/app/components/auth-user/authUser";
 import Loading from "@/app/loading";
 
@@ -34,6 +35,8 @@ function ListBookBorrowed() {
   const [modalDetailTransaction, setModalDetailTransaction] = useState(false);
   const [transactionFound, setTransactionFound] = useState(true);
   const [search, setSearch] = useState("");
+  const [currentTime, setCurrentTime] = useState(moment());
+  const [alertedTransactions, setAlertedTransactions] = useState<any>([]);
 
   function closeModalDetailTransaction() {
     setModalDetailTransaction(false);
@@ -69,6 +72,61 @@ function ListBookBorrowed() {
   const handleSearchTransaction = (event: any) => {
     setSearch(event.target.value);
     setTransactionFound(true);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    filteredTransactions.forEach(async (transaction: any) => {
+      const returnDate = moment(transaction?.returnDate);
+      const diffSeconds = returnDate.diff(moment(), "seconds");
+
+      if (diffSeconds === 0 && transaction?.isStatus && !alertedTransactions.includes(transaction?.id)) {
+        alert(`Time is up for the transaction of ${transaction?.book?.title}`);
+
+        const totalDaysLate = moment().diff(returnDate, "days");
+        // Ensure totalDaysLate is at least 1 if returnDate is in the past but less than a day late
+        const adjustedTotalDaysLate = totalDaysLate > 0 ? totalDaysLate : 1;
+        const adjustedTotalFine = adjustedTotalDaysLate * 10000;
+
+        const formData = new FormData();
+        formData.append("idBook", transaction?.book?.id);
+        formData.append("totalDay", adjustedTotalDaysLate.toString());
+        formData.append("totalFine", adjustedTotalFine.toString());
+
+        await dispatch(createFine({ formData, session }));
+
+        setAlertedTransactions((prev: any) => [...prev, transaction?.id]);
+      }
+    });
+  }, [filteredTransactions, alertedTransactions]);
+
+  const countdown = (transaction: any) => {
+    const now = moment();
+    const diffSeconds = moment(transaction?.returnDate).diff(now, "seconds");
+
+    if (diffSeconds < 0) return null;
+
+    const duration = moment.duration(diffSeconds * 1000);
+    let remainingTime = "";
+    if (duration.days() > 0) {
+      remainingTime += `${duration.days()} days, `;
+    }
+    if (duration.hours() > 0) {
+      remainingTime += `${String(duration.hours()).padStart(2, "0")}:`;
+    }
+    if (duration.minutes() > 0) {
+      remainingTime += `${String(duration.minutes()).padStart(2, "0")}:`;
+    }
+    remainingTime += `${String(duration.seconds()).padStart(2, "0")}`;
+
+    return `(${remainingTime})`;
   };
 
   return (
@@ -118,31 +176,27 @@ function ListBookBorrowed() {
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Transaction Type
+                            Transaction
+                            <span className="text-transparent">x</span>Type
                           </th>
                           <th
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Total Book
+                            Total<span className="text-transparent">x</span>Book
                           </th>
                           <th
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Loan Date
+                            Loan<span className="text-transparent">x</span>Date
                           </th>
                           <th
                             scope="col"
                             className="px-2 py-4 text-white font-bold text-center"
                           >
-                            Return Date
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-2 py-4 text-white font-bold text-center"
-                          >
-                            Max Loan
+                            Return<span className="text-transparent">x</span>
+                            Date
                           </th>
                           <th
                             scope="col"
@@ -208,12 +262,11 @@ function ListBookBorrowed() {
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
                                     {moment(transaction?.returnDate).format(
                                       "DD MMMM YYYY"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                    {moment(transaction?.loanMaximum).format(
-                                      "DD MMMM YYYY"
-                                    )}
+                                    )}{" "}
+                                    <br />
+                                    <span className="font-normal text-red-500">
+                                      {countdown(transaction)}
+                                    </span>
                                   </td>
                                   <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
                                     {transaction?.isStatus

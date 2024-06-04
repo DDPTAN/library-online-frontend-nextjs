@@ -8,9 +8,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
 
 import DetailFine from "@/app/components/detail-fine/page";
-import UpdateFine from "@/app/pages/users/update-fine/page";
 import Search from "@/app/components/search/search";
-import ButtonDeleteFine from "@/app/components/button-delete-fine/buttonDeleteFine";
 import ButtonUpdateFine from "@/app/components/button-update-fine/buttonUpdateFine";
 import Loading from "@/app/loading";
 import AuthUser from "@/app/components/auth-user/authUser";
@@ -30,16 +28,11 @@ function ListFine() {
 
   const [dataFine, setDataFine] = useState<any>();
   const [modalDetailFine, setModalDetailFine] = useState(false);
-  const [modalUpdateFine, setModalUpdateFine] = useState(false);
   const [fineFound, setFineFound] = useState(true);
   const [search, setSearch] = useState("");
 
   function closeModalDetailFine() {
     setModalDetailFine(false);
-  }
-
-  function closeModalUpdateFine() {
-    setModalUpdateFine(false);
   }
 
   const filteredFines = fines.filter((fine: any) => {
@@ -64,13 +57,6 @@ function ListFine() {
         setModalDetailFine={setModalDetailFine}
         closeModalDetailFine={closeModalDetailFine}
         dataFine={dataFine}
-      />
-      <UpdateFine
-        modalUpdateFine={modalUpdateFine}
-        setModalUpdateFine={setModalUpdateFine}
-        closeModalUpdateFine={closeModalUpdateFine}
-        dataFine={dataFine}
-        fetchTransactions={() => dispatch(fetchFineByUser({ session, status }))}
       />
       <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
         <div className="mb-5 flex justify-between">
@@ -174,13 +160,21 @@ function ListFine() {
                                 <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
                                   {fine?.totalFine}
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                                  {fine?.status !== null ? "Paid" : "Not Paid"}
+                                <td
+                                  className={`whitespace-nowrap px-2 py-4 font-medium text-center ${
+                                    fine?.status === "success"
+                                      ? "text-green-500"
+                                      : "text-red-500"
+                                  }`}
+                                >
+                                  {fine?.status === "success"
+                                    ? "Paid"
+                                    : "Not Paid"}
                                 </td>
                                 <td className="flex flex-row justify-center whitespace-nowrap px-6 py-4 text-center">
                                   <button
                                     type="button"
-                                    className="px-3 py-1 mr-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
+                                    className="px-3 py-1 mr-1 font-bold rounded-md shadow-sm bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
                                     onClick={() => {
                                       setModalDetailFine(true);
                                       setDataFine(fine);
@@ -189,16 +183,17 @@ function ListFine() {
                                     Detail Fine
                                   </button>
                                   <span className="text-gray-500 font-bold text-xl">
-                                    {" "}
-                                    |{" "}
-                                  </span>
-                                  <span className="text-gray-500 font-bold text-xl">
-                                    {" "}
+                                    |
                                   </span>
                                   <ButtonUpdateFine
                                     fine={fine}
-                                    setDataFine={setDataFine}
-                                    setModalUpdateFine={setModalUpdateFine}
+                                    fineStatus={fine?.status}
+                                    session={session}
+                                    fetchFineByUser={() =>
+                                      dispatch(
+                                        fetchFineByUser({ session, status })
+                                      )
+                                    }
                                   />
                                 </td>
                               </tr>

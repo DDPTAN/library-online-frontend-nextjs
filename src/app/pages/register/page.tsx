@@ -55,7 +55,6 @@ export default function Register() {
   } = useForm<RegisterValues>({
     mode: "onChange",
   });
-
   const onSubmit: SubmitHandler<RegisterValues> = async (formData) => {
     try {
       const response = await dispatch(registerUser({ formData }));
@@ -72,7 +71,9 @@ export default function Register() {
           style: { marginTop: "65px" },
         });
         reset();
-        router.push("/pages/validation-account");
+        router.push(
+          `/pages/validation-account?expiryTime=${response?.payload?.data?.otp?.ttl}`
+        );
       } else if (response.payload.status === 400) {
         toast.error(response.payload.message, {
           position: "top-right",
