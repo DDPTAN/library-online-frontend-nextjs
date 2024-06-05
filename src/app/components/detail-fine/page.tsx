@@ -86,8 +86,8 @@ function DetailTransaction({
                               scope="col"
                               className="px-2 py-4 text-white font-bold text-center"
                             >
-                              Todal Day
-                              <span className="text-transparent">x</span>Day
+                              Todal<span className="text-transparent">x</span>
+                              Day
                             </th>
                             <th
                               scope="col"
@@ -118,8 +118,16 @@ function DetailTransaction({
                             <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
                               {dataFine?.totalFine}
                             </td>
-                            <td className="whitespace-nowrap px-2 py-4 font-medium text-gray-500 text-center">
-                              {dataFine?.status !== "" ? "Paid" : "Not Paid"}
+                            <td
+                              className={`whitespace-nowrap px-2 py-4 font-medium text-center ${
+                                dataFine?.status === "success"
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              {dataFine?.status === "success"
+                                ? "Paid"
+                                : "Not Paid"}
                             </td>
                           </tr>
                         </tbody>

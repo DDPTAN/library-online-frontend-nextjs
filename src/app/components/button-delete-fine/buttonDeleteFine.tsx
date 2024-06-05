@@ -74,7 +74,7 @@ export default function ButtonDeleteFine({ fineId, fetchFines }: FineDeleteProps
   return (
     <button
     type="button"
-    className="w-1/2 px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white hover:opacity-80"
+    className="px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white hover:opacity-80"
     onClick={() => handleDeleteFine(fineId)}
   >
     Delete

@@ -15,6 +15,7 @@ import Loading from "@/app/loading";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "@/app/components/navbar/navbar";
 
 function DashboardAdmin() {
   const { data: session, status } = useSession();
@@ -69,7 +70,7 @@ function DashboardAdmin() {
               theme: "colored",
               style: { marginTop: "65px" },
             });
-            dispatch(fetchUsers({session, status}));
+            dispatch(fetchUsers({ session, status }));
           }
         }
       });
@@ -95,163 +96,167 @@ function DashboardAdmin() {
   };
 
   return (
-    <section className="w-full min-h-screen mt-20">
-      <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
-        <div className="mb-5 flex justify-between">
-          <p className="m-0 text-center font-bold text-2xl text-gray-500">
-            List User
-          </p>
-        </div>
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex flex-col">
-              <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                  <div className="overflow-hidden">
-                    <table className="min-w-full text-left text-sm font-light">
-                      <thead className="bg-white font-medium bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 shadow shadow-gray-400">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            No
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Username
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Email
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Email<span className="text-blue-500">x</span>Verified
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Phone
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Gender
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-white font-bold text-center"
-                          >
-                            Address
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-4 text-white font-bold text-center"
-                          >
-                            Action
-                          </th>
-                        </tr>
-                      </thead>
-                      <thead className="bg-white font-medium border-b-2 border-b-black">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-2 text-gray-500 font-bold text-center"
-                          ></th>
-                          <th
-                            scope="col"
-                            className="text-gray-500 font-bold text-center flex justify-center items-center"
-                          >
-                            <Search
-                              search={search}
-                              handleSearch={handleSearchUser}
-                            />
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-4 text-gray-500 font-bold text-center"
-                          ></th>
-                        </tr>
-                      </thead>
-                      {filteredUsers.length > 0 ? (
-                        filteredUsers?.map((user: any, i: any) => {
-                          return (
-                            <tbody key={i}>
-                              <tr className="border-b bg-white">
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {i++ + 1}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.username}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.email}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.isEmailVerified ? "Yes" : "No"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.phone}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.gender}
-                                </td>
-                                <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
-                                  {user?.address}
-                                </td>
-                                <td className="whitespace-nowrap py-4 text-center">
-                                  <button
-                                    type="button"
-                                    className="px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white hover:opacity-80"
-                                    onClick={() => handleDeleteUser(user?.id)}
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          );
-                        })
-                      ) : (
-                        <tbody>
-                          <tr className=" bg-white font-medium border-b-2 border-b-black">
-                            <td
+    <>
+      <Navbar />
+      <section className="w-full min-h-screen mt-20">
+        <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
+          <div className="mb-5 flex justify-between">
+            <p className="m-0 text-center font-bold text-2xl text-gray-500">
+              List User
+            </p>
+          </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex flex-col">
+                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden">
+                      <table className="min-w-full text-left text-sm font-light">
+                        <thead className="bg-white font-medium bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 shadow shadow-gray-400">
+                          <tr>
+                            <th
                               scope="col"
-                              className="px-2 text-gray-500 text-center"
-                            ></td>
-                            <td
-                              scope="col"
-                              className="px-6 py-4 text-gray-500 text-left"
+                              className="py-4 text-white font-bold text-center"
                             >
-                              User not found
-                            </td>
-                            <td
+                              No
+                            </th>
+                            <th
                               scope="col"
-                              className="py-4 text-gray-500 text-center"
-                            ></td>
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Username
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Email
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Email<span className="text-blue-500">x</span>
+                              Verified
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Phone
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Gender
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-white font-bold text-center"
+                            >
+                              Address
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-4 text-white font-bold text-center"
+                            >
+                              Action
+                            </th>
                           </tr>
-                        </tbody>
-                      )}
-                    </table>
+                        </thead>
+                        <thead className="bg-white font-medium border-b-2 border-b-black">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-2 text-gray-500 font-bold text-center"
+                            ></th>
+                            <th
+                              scope="col"
+                              className="text-gray-500 font-bold text-center flex justify-center items-center"
+                            >
+                              <Search
+                                search={search}
+                                handleSearch={handleSearchUser}
+                              />
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-4 text-gray-500 font-bold text-center"
+                            ></th>
+                          </tr>
+                        </thead>
+                        {filteredUsers.length > 0 ? (
+                          filteredUsers?.map((user: any, i: any) => {
+                            return (
+                              <tbody key={i}>
+                                <tr className="border-b bg-white">
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {i++ + 1}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.username}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.email}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.isEmailVerified ? "Yes" : "No"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.phone}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.gender}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 font-medium text-gray-500 text-center">
+                                    {user?.address}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 text-center">
+                                    <button
+                                      type="button"
+                                      className="px-3 py-1 font-medium rounded-md shadow-sm bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white hover:opacity-80"
+                                      onClick={() => handleDeleteUser(user?.id)}
+                                    >
+                                      Delete
+                                    </button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            );
+                          })
+                        ) : (
+                          <tbody>
+                            <tr className=" bg-white font-medium border-b-2 border-b-black">
+                              <td
+                                scope="col"
+                                className="px-2 text-gray-500 text-center"
+                              ></td>
+                              <td
+                                scope="col"
+                                className="px-6 py-4 text-gray-500 text-left"
+                              >
+                                User not found
+                              </td>
+                              <td
+                                scope="col"
+                                className="py-4 text-gray-500 text-center"
+                              ></td>
+                            </tr>
+                          </tbody>
+                        )}
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
+          )}
+        </div>
+      </section>
+    </>
   );
 }
 

@@ -17,6 +17,7 @@ import { UserAuth } from "@/types/userAuth";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "@/app/components/navbar/navbar";
 
 interface IdParamsProps {
   params: { id: number };
@@ -24,7 +25,7 @@ interface IdParamsProps {
 
 export default function DetailMovie({ params }: IdParamsProps) {
   const { data: session, status } = useSession();
-  const userAuth: UserAuth | undefined = session?.user;  
+  const userAuth: UserAuth | undefined = session?.user;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -101,105 +102,109 @@ export default function DetailMovie({ params }: IdParamsProps) {
   };
 
   return (
-    <section className="min-w-full min-h-screen mt-24">
-      <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="w-full">
-            <div className="flex flex-col md:flex-row justify-start items-start gap-5">
-              <div className="w-full md:w-1/3 mb-5 md:mb-0 flex justify-center md:justify-end">
-                {book?.image &&
-                  book?.image !==
-                    "http://localhost:5000/uploads/book/image/" && (
-                    <Image
-                      src={book?.image ? book?.image : ""}
-                      alt={book?.title}
-                      width={300}
-                      height={300}
-                      objectFit="cover"
-                      className="rounded-lg shadow shadow-gray-400 overflow-hidden"
-                      priority={true}
-                    />
-                  )}
-              </div>
-              <div className="w-full md:w-1/3 mb-5 md:mb-0">
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">Title</p>
-                  <p className="text-sm text-gray-500">{book?.title}</p>
+    <>
+      <Navbar />
+      <section className="min-w-full min-h-screen mt-24">
+        <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="w-full">
+              <div className="flex flex-col md:flex-row justify-start items-start gap-5">
+                <div className="w-full md:w-1/3 mb-5 md:mb-0 flex justify-center md:justify-end">
+                  {book?.image &&
+                    book?.image !==
+                      "http://localhost:5000/uploads/book/image/" && (
+                      <Image
+                        src={book?.image ? book?.image : ""}
+                        alt={book?.title}
+                        width={300}
+                        height={300}
+                        objectFit="cover"
+                        className="rounded-lg shadow shadow-gray-400 overflow-hidden"
+                        priority={true}
+                      />
+                    )}
                 </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">Category</p>
-                  <div className="flex flex-row">
-                    {book?.categories?.map((cat: any, index: number) => (
-                      <p key={index} className="text-sm text-gray-500">
-                        {cat?.category},
-                      </p>
-                    ))}
+                <div className="w-full md:w-1/3 mb-5 md:mb-0">
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">Title</p>
+                    <p className="text-sm text-gray-500">{book?.title}</p>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">Category</p>
+                    <div className="flex flex-row">
+                      {book?.categories?.map((cat: any, index: number) => (
+                        <p key={index} className="text-sm text-gray-500">
+                          {cat?.category},
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">
+                      Publication Date
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {moment(book?.publicationDate).format("DD MMMM YYYY")}
+                    </p>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">ISBN</p>
+                    <p className="text-sm text-gray-500">{book?.isbn}</p>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">Pages</p>
+                    <p className="text-sm text-gray-500">{book?.pages}</p>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">Author</p>
+                    <p className="text-sm text-gray-500">{book?.author}</p>
+                  </div>
+                  <div className="mb-2 border-b-2 border-b-gray-500">
+                    <p className="text-md text-gray-500 font-bold">
+                      Desription
+                    </p>
+                    <p className="text-sm text-gray-500">{book?.description}</p>
                   </div>
                 </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">
-                    Publication Date
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {moment(book?.publicationDate).format("DD MMMM YYYY")}
-                  </p>
-                </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">ISBN</p>
-                  <p className="text-sm text-gray-500">{book?.isbn}</p>
-                </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">Pages</p>
-                  <p className="text-sm text-gray-500">{book?.pages}</p>
-                </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">Author</p>
-                  <p className="text-sm text-gray-500">{book?.author}</p>
-                </div>
-                <div className="mb-2 border-b-2 border-b-gray-500">
-                  <p className="text-md text-gray-500 font-bold">Desription</p>
-                  <p className="text-sm text-gray-500">{book?.description}</p>
-                </div>
-              </div>
-              {userAuth?.data?.role && userAuth?.data?.role?.role === "User" ? (
-                <div className="mt-5 w-full md:w-1/3 mb-5 md:mb-0 flex justify-end items-center">
-                  <div className="flex flex-col justify-center items-end">
-                    <div className="mb-5 flex justify-end items-center gap-5">
-                      <p className="text-md text-gray-500 font-semibold">
-                        Max<span className="text-red-500">({book?.qty})</span>{" "}
-                        book
-                      </p>
+                {userAuth?.data?.role &&
+                userAuth?.data?.role?.role === "User" ? (
+                  <div className="mt-5 w-full md:w-1/3 mb-5 md:mb-0 flex justify-end items-center">
+                    <div className="flex flex-col justify-center items-end">
+                      <div className="mb-5 flex justify-end items-center gap-5">
+                        <p className="text-md text-gray-500 font-semibold">
+                          Max<span className="text-red-500">({book?.qty})</span>{" "}
+                          book
+                        </p>
+                        <button
+                          onClick={handleDecrement}
+                          className="text-xl px-3 py-1 rounded-lg font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
+                        >
+                          -
+                        </button>
+                        <p className="text-md text-gray-500">{quantity}</p>
+                        <button
+                          onClick={handleIncrement}
+                          className="text-xl px-3 py-1 rounded-lg font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
+                        >
+                          +
+                        </button>
+                      </div>
                       <button
-                        onClick={handleDecrement}
-                        className="text-xl px-3 py-1 rounded-lg font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
+                        onClick={() => handleBorrowBook(book, quantity)}
+                        className="p-2 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
                       >
-                        -
-                      </button>
-                      <p className="text-md text-gray-500">{quantity}</p>
-                      <button
-                        onClick={handleIncrement}
-                        className="text-xl px-3 py-1 rounded-lg font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
-                      >
-                        +
+                        Borrow Book
                       </button>
                     </div>
-                    <button
-                      onClick={() => handleBorrowBook(book, quantity)}
-                      className="p-2 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white hover:opacity-80"
-                    >
-                      Borrow Book
-                    </button>
                   </div>
-                </div>
-              ) : (
-                null
-              )}
+                ) : null}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
+          )}
+        </div>
+      </section>
+    </>
   );
 }

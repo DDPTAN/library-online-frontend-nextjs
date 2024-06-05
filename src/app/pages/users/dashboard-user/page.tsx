@@ -14,6 +14,7 @@ import { fetchBooks } from "@/redux/features/bookSlice";
 import Loading from "@/app/loading";
 import AuthUser from "@/app/components/auth-user/authUser";
 import SearchBook from "@/app/components/search-book/searchBook";
+import Navbar from "@/app/components/navbar/navbar";
 
 function DashboardUser() {
   const { data: session, status } = useSession();
@@ -52,6 +53,7 @@ function DashboardUser() {
 
   return (
     <section className="w-full min-h-screen mt-20">
+      <Navbar />
       <div className="w-full px-4 md:px-10 lg:px-20 pb-10">
         <div className="mb-5 flex justify-between">
           <p className="m-0 text-center font-bold text-2xl text-gray-500">

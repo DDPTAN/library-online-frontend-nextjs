@@ -20,6 +20,7 @@ import { CheckAuthValues } from "@/types/checkAuth";
 import "react-toastify/dist/ReactToastify.css";
 
 import defaultPhoto from "@/assets/img/default-photo.png";
+import Navbar from "@/app/components/navbar/navbar";
 
 interface ProfileProps {
   params: { id: string };
@@ -168,17 +169,21 @@ function ProfileUser({ params }: ProfileProps) {
     }
   };
 
-
   return (
-    <section className="w-full max-h-screen mt-20 px-28 max-md:px-5">
-      <p className="w-full font-bold text-2xl text-gray-500">My Profile</p>
-      <div className="mt-5">
+    <>
+      <Navbar />
+      <section className="w-full max-h-screen mt-20 px-28 max-md:px-5">
+        <p className="w-full font-bold text-2xl text-gray-500">My Profile</p>
+        <div className="mt-5">
           {loadingUser ? (
             <Loading />
           ) : (
             <div className="w-full lg:w-1/2 h-auto flex flex-col lg:flex-row">
               <div className="w-full lg:w-1/2 mb-14 lg:mb-0 mr-5">
-                <form encType="multipart/form-data" className="flex flex-col justify-center items-center">
+                <form
+                  encType="multipart/form-data"
+                  className="flex flex-col justify-center items-center"
+                >
                   {user &&
                   user?.photo &&
                   user?.photo !== "http://localhost:5000/uploads/photo/" ? (
@@ -226,7 +231,10 @@ function ProfileUser({ params }: ProfileProps) {
                   </div>
                 </form>
               </div>
-              <form onSubmit={handleSubmit(onSubmit, onError)} className="w-full lg:w-1/2 mb-14 lg:mb-0">
+              <form
+                onSubmit={handleSubmit(onSubmit, onError)}
+                className="w-full lg:w-1/2 mb-14 lg:mb-0"
+              >
                 <div className="px-4 py-2 flex flex-col-reverse lg:flex-col rounded-lg shadow shadow-gray-400">
                   <div className="col-span-full mb-5 text-start max-md:text-end">
                     <button
@@ -378,8 +386,9 @@ function ProfileUser({ params }: ProfileProps) {
               </form>
             </div>
           )}
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }
 

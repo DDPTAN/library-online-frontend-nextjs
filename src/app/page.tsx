@@ -3,11 +3,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import DashboardUser from "@/app/pages/users/dashboard-user/page"
 
 import { fetchBooks } from "@/redux/features/bookSlice";
-
-import Register from "./pages/register/page";
 
 export default function Home({
   searchParams,
@@ -31,10 +30,8 @@ export default function Home({
 
   return (
     <section className="m-0 p-0">
-      <Register />
-      {/* <Swipers books={books} />
-      <CardBook books={currentBooks} />
-      <PaginationBook
+      <DashboardUser />
+      {/* <PaginationBook
         totalBooks={books?.length}
         firstPage={start > 0}
         lastPage={end < books?.length}

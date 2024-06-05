@@ -33,7 +33,7 @@ export default function RootLayout({
           <AuthContextProvider>
             <ReduxProvider>
               <ToastContainer />
-              <Navbar />
+              {/* <Navbar /> */}
               {children}
               <Footer />
             </ReduxProvider>

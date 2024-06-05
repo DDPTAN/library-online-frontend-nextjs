@@ -12,8 +12,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
 
-import { fetchUserAuth } from "@/redux/features/userSlice";
 import SearchHome from "../search-home/searchHome";
+import { fetchUserAuth } from "@/redux/features/userSlice";
+import { fetchBooks } from "@/redux/features/bookSlice";
 import { UserAuth } from "@/types/userAuth";
 
 import Swal from "sweetalert2";
@@ -23,8 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./navbar.module.css";
 
 import icon from "@/assets/img/logo-library-online.png";
-import defaultPhoto from "@/assets/img/user.png";
-import { fetchBooks } from "@/redux/features/bookSlice";
+import defaultPhoto from "@/assets/img/default-photo.png";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -118,7 +118,7 @@ export default function Navbar() {
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                   {/* Mobile menu button*/}
-                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open main menu</span>
                     {open ? (
